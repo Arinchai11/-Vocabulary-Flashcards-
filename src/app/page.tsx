@@ -1,65 +1,89 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+
+// ข้อมูลคำศัพท์
+const vocabularyData = [
+  { id: 1, word: "Resilient", definition: "ยืดหยุ่น, ล้มแล้วลุกเร็ว", color: "bg-blue-500" },
+  { id: 2, word: "Inevitably", definition: "อย่างหลีกเลี่ยงไม่ได้", color: "bg-emerald-500" },
+  { id: 3, word: "Authentic", definition: "แท้จริง, น่าเชื่อถือ", color: "bg-amber-500" },
+  { id: 4, word: "Collaboration", definition: "การร่วมมือกัน", color: "bg-purple-500" },
+  { id: 5, word: "Innovative", definition: "ซึ่งเป็นนวัตกรรมใหม่", color: "bg-rose-500" },
+  { id: 6, word: "Persistence", definition: "ความพยายามเยี่ยงอย่าง", color: "bg-indigo-500" },
+  { id: 7, word: "Resilient", definition: "ยืดหยุ่น, ล้มแล้วลุกเร็ว", color: "bg-red-500" },
+  { id: 8, word: "Inevitably", definition: "อย่างหลีกเลี่ยงไม่ได้", color: "bg-sky-400" },
+  { id: 9, word: "Authentic", definition: "แท้จริง, น่าเชื่อถือ", color: "bg-purple-400" },
+  { id: 10, word: "Collaboration", definition: "การร่วมมือกัน", color: "bg-teal-400" },
+  { id: 11, word: "Innovative", definition: "ซึ่งเป็นนวัตกรรมใหม่", color: "bg-zinc-700" },
+  { id: 12, word: "Persistence", definition: "ความพยายามเยี่ยงอย่าง", color: "bg-cyan-500" },
+  { id: 13, word: "Resilient", definition: "ยืดหยุ่น, ล้มแล้วลุกเร็ว", color: "bg-green-500" },
+  { id: 14, word: "Inevitably", definition: "อย่างหลีกเลี่ยงไม่ได้", color: "bg-fuchsia-600" },
+  { id: 15, word: "Authentic", definition: "แท้จริง, น่าเชื่อถือ", color: "bg-lime-500" },
+  { id: 16, word: "Collaboration", definition: "การร่วมมือกัน", color: "bg-violet-600" },
+  { id: 17, word: "Innovative", definition: "ซึ่งเป็นนวัตกรรมใหม่", color: "bg-orange-700" },
+  { id: 18, word: "Persistence", definition: "ความพยายามเยี่ยงอย่าง", color: "bg-zinc-900" },
+  { id: 19, word: "Resilient", definition: "ยืดหยุ่น, ล้มแล้วลุกเร็ว", color: "bg-fuchsia-600" },
+  { id: 20, word: "Inevitably", definition: "อย่างหลีกเลี่ยงไม่ได้", color: "bg-cyan-500" },
+];
+
+export default function FlashcardGrid() {
+  // เก็บสถานะการพลิกแยกแต่ละใบโดยใช้ ID
+  const [flippedCards, setFlippedCards] = useState<Record<number, boolean>>({});
+
+  const toggleFlip = (id: number) => {
+    setFlippedCards((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <div className="min-h-screen bg-gray-50 p-8">
+      <header className="max-w-6xl mx-auto mb-10 text-center">
+        <h1 className="text-4xl font-bold text-slate-800 mb-2">หน้าคำศัพท์ที่แปลได้ทั้งหมด</h1>
+        <p className="text-slate-500">คลิกที่การ์ดแต่ละใบเพื่อดูคำแปล</p>
+      </header>
+
+      {/* Grid Layout: ปรับจำนวน Column ตามขนาดหน้าจอ */}
+      <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {vocabularyData.map((item) => (
+          <div 
+            key={item.id} 
+            className="h-48 perspective-1000 cursor-pointer"
+            onClick={() => toggleFlip(item.id)}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+            <motion.div
+              animate={{ rotateY: flippedCards[item.id] ? 180 : 0 }}
+              transition={{ duration: 0.5, type: "spring", stiffness: 200, damping: 20 }}
+              className="relative w-full h-full w-full h-full"
+              style={{ transformStyle: "preserve-3d" }}
+            >
+              {/* หน้าหน้า (Front) */}
+              <div 
+                className="absolute inset-0 bg-white border border-slate-200 rounded-xl shadow-sm flex items-center justify-center p-4"
+                style={{ backfaceVisibility: "hidden" }}
+              >
+                <h2 className="text-2xl font-bold text-slate-700">{item.word}</h2>
+              </div>
+
+              {/* หน้าหลัง (Back) */}
+              <div 
+                className={`absolute inset-0 ${item.color} rounded-xl shadow-lg flex items-center justify-center p-6 text-white text-center`}
+                style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
+              >
+                <p className="text-xl font-medium leading-tight">{item.definition}</p>
+              </div>
+            </motion.div>
+          </div>
+        ))}
+      </div>
+
+      <style jsx>{`
+        .perspective-1000 {
+          perspective: 1000px;
+        }
+      `}</style>
     </div>
   );
 }
